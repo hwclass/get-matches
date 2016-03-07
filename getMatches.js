@@ -23,7 +23,20 @@ var Database = require('sequelize'),
     criterias = ['country', 'geo', 'gender', 'preferences'],
     ArgumentOptions = ArgumentOptions || {},
     Arguments = Arguments || {},
-    Query = Query || {};
+    Query = Query || {},
+    CLI =  CLI || {},
+    config = {
+      db : {
+        user : 'hwclass',
+        pass : 'Qwe123!',
+        domain : 'localhost',
+        port : '5432',
+        dbName : 'hwclass'
+      }
+    }
+
+var db = new Database('postgres://'+config.db.user+':'+config.db.pass+'@'+config.db.domain+':'+config.db.port+'/'+config.db.dbName);
+
 
 //console.log('country: ' + argv.country + ' geo: ' + argv.geo + ' gender: ' + argv.gender + ' preferences: ' + argv.preferences);
 
@@ -53,16 +66,78 @@ ArgumentOptions.build = function (country, geo, gender, preferences) {
  * @returns {object}
 */
 Arguments.build = function (args) {
-  return {
-     id: args.id,
-     name: args.name,
-     country_code: args.country_code,
-     latitude: args.latitude,
-     longitude: args.longitude,
-     gender: args.gender,
-     preferences: args.preferences
-   }
+  var builtArguments = {};
+  for (var item in args) {
+    if (item !== '' || typeof item !== 'null' || item !== undefined) {
+      builtArguments[item]= args[item]
+    }
+  } 
+  return builtArguments;
 }
+
+var Cleaner = db.define('cleaner', {
+  name:  {
+    type     : Database.STRING,
+    allowNull: false,
+    get      : function()  {
+      return this.getDataValue('name');
+    }
+  },
+  country_code: {
+    type     : Database.STRING,
+    allowNull: false,
+    get      : function () {
+      var country_code = this.getDataValue('country_code');
+      return country_code;
+    },
+    set      : function(val) {
+      this.setDataValue('country_code', val);
+    }
+  },
+  latitude: {
+    type     : Database.DOUBLE,
+    allowNull: false,
+    get      : function () {
+      var latitude = this.getDataValue('latitude');
+      return latitude;
+    },
+    set      : function(val) {
+      this.setDataValue('latitude', val);
+    }
+  },
+  longitude: {
+    type     : Database.DOUBLE,
+    allowNull: false,
+    get      : function () {
+      var longitude = this.getDataValue('longitude');
+      return longitude;
+    },
+    set      : function(val) {
+      this.setDataValue('longitude', val);
+    }
+  },
+  gender: {
+    type     : Database.STRING,
+    allowNull: false,
+    get      : function () {
+      var gender = this.getDataValue('gender');
+      return gender;
+    },
+    set      : function(val) {
+      this.setDataValue('gender', val);
+    }
+  },
+  preferences: {
+    type     : Database.STRING,
+    allowNull: false,
+    get: function() {
+      return JSON.parse(this.getDataValue('preferences'));
+    }, 
+    set: function(val) {
+      return this.setDataValue('preferences', JSON.stringify(val));
+    }
+  }
+});
 
 /**
  * Query.build() is a communicator for the database to query it
@@ -75,6 +150,44 @@ Query.build = function (args, cb) {
   //make the query for db and get result
   cb(result);
 }
+
+/*
+Cleaner.sync({force: true}).then(function () {
+  return Cleaner.create({ name : 'John Doe', country_code : 'nl', latitude : 43.5677754, longitude : 30.4423445, gender : 'M', preferences : ['fridge', 'owen']});
+});
+*/
+
+builtArguments = Arguments.build({country_code : 'nl'});
+
+console.dir(builtArguments);
+
+Cleaner.findAll({
+  where: builtArguments
+}).then(function (result) {
+  CLI.build(result);
+});
+
+CLI.build = function (result) {
+  var outputStr = '';
+  for (var resultIndex = 0, len = result.length; resultIndex < len; resultIndex++) {
+    outputStr += '- id: ' + result[resultIndex].id + ' - name: ' + result[resultIndex].name + ' - gender: ' + result[resultIndex].gender +' - preferences:' + result[resultIndex].preferences;
+  }
+  console.log(outputStr);
+}
+
+/*
+db.query("SELECT * FROM cleaners").then(function(myTableRows) {
+  console.log(myTableRows[0]);
+})
+*/
+  
+
+/*
+Cleaner.findAll({}).then(function (cleaners) {
+  console.log('find all cleaners');
+  console.dir(cleaners);
+});
+*/
 
 //usage
 /*
