@@ -4,7 +4,7 @@
   "description": "An experimental tool to manage Node.js scripts over Gulp",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "get-matches" : "node getMatches.js"
   },
   "repository": {
     "type": "git",
