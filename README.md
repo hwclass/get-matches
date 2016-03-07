@@ -17,7 +17,7 @@ An experimental tool to manage Node.js scripts over Gulp
 * npm install --save pg pg-hstore
 
 ####Download postgres
-[Link](<pg-link>) optionall) [Link](<pgadd-link>)
+[Link](http://www.postgresql.org/download/) or optionally [Link](http://postgresapp.com/)
 
 ####Create dummy db and entries
 ```javascript

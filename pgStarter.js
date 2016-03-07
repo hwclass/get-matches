@@ -6,7 +6,7 @@ var Database = require('sequelize'),
 			user : '',
 			pass : '',
 			domain : '',
-			port : '',
+			port : 5432,
 			dbName : ''
 		}
 	}
