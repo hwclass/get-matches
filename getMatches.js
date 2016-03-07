@@ -2,6 +2,7 @@
 
 var argv = require('yargs').argv,
     criterias = ['country', 'geo', 'gender', 'preferences'],
+    ArgumentOptions = ArgumentOptions || {},
     Arguments = Arguments || {},
     Query = Query || {};
 
