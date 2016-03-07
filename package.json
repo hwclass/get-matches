@@ -22,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/hwclass/get-matches/issues"
   },
-  "homepage": "https://github.com/hwclass/get-matches#readme"
+  "homepage": "https://github.com/hwclass/get-matches#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-exec": "^2.1.2",
+    "yargs": "^4.2.0"
+  }
 }
