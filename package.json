@@ -1,0 +1,26 @@
+{
+  "name": "get-matches",
+  "version": "1.0.0",
+  "description": "An experimental tool to manage Node.js scripts over Gulp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hwclass/get-matches.git"
+  },
+  "keywords": [
+    "gulp",
+    "node.js",
+    "search",
+    "query",
+    "db"
+  ],
+  "author": "hwclass",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hwclass/get-matches/issues"
+  },
+  "homepage": "https://github.com/hwclass/get-matches#readme"
+}
