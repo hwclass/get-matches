@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*!
  * getMatches.js.
  *
@@ -16,9 +18,8 @@
  * Manages the tasks as creating a dummy db and querying it over get-matches method
  */
 
-#!/usr/bin/env node
-
-var argv = require('yargs').argv,
+var Database = require('sequelize'),
+    argv = require('yargs').argv,
     criterias = ['country', 'geo', 'gender', 'preferences'],
     ArgumentOptions = ArgumentOptions || {},
     Arguments = Arguments || {},

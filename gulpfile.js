@@ -31,6 +31,7 @@ gulp.task('prepare-db', function (cb) {
       console.log(err);
       return;
     } else {
+      console.log(stdout);
       console.log('db created.');
     }
   })

@@ -16,16 +16,14 @@ var db = new Database('postgres://'+config.db.user+':'+config.db.pass+'@'+config
 //create dummy database
 var Cleaner = db.define('cleaner', {
   name:  {
-    type     : Sequelize.STRING,
+    type     : Database.STRING,
     allowNull: false,
     get      : function()  {
-      //var title = this.getDataValue('title');
-      // 'this' allows you to access attributes of the instance
       return this.getDataValue('name');
     }
   },
   country_code: {
-    type     : Sequelize.STRING,
+    type     : Database.STRING,
     allowNull: false,
     get      : function () {
     	var country_code = this.getDataValue('country_code');
@@ -36,7 +34,7 @@ var Cleaner = db.define('cleaner', {
     }
   },
   latitude: {
-    type     : Sequelize.DOUBLE,
+    type     : Database.DOUBLE,
     allowNull: false,
     get      : function () {
     	var latitude = this.getDataValue('latitude');
@@ -47,7 +45,7 @@ var Cleaner = db.define('cleaner', {
     }
   },
   longitude: {
-    type     : Sequelize.DOUBLE,
+    type     : Database.DOUBLE,
     allowNull: false,
     get      : function () {
     	var longitude = this.getDataValue('longitude');
@@ -58,7 +56,7 @@ var Cleaner = db.define('cleaner', {
     }
   },
   gender: {
-    type     : Sequelize.STRING,
+    type     : Database.STRING,
     allowNull: false,
     get      : function () {
     	var gender = this.getDataValue('gender');
@@ -69,7 +67,7 @@ var Cleaner = db.define('cleaner', {
     }
   },
   preferences: {
-    type     : Sequelize.ENUM,
+    type     : Database.ENUM('windows', 'owen', 'laundry', 'fridge', 'ironing'),
     allowNull: false,
     get      : function () {
     	var preferences = this.getDataValue('preferences');
@@ -83,6 +81,18 @@ var Cleaner = db.define('cleaner', {
 
 Cleaner
   .create({ name : 'John Doe', country : 'nl', lalitute : 43.5677754, longitude : 30.4423445, gender : 'M', preferences : ['fridge', 'ironing']})
+  .then(function(clieaner) {
+    console.log({name : employee.get('name'), country : employee.get('country_code'), lalitute : employee.get('latitude'), longitude : employee.get('longitude'), gender : employee.get('gender'), preferences : employee.get('preferences')});
+  });
+
+Cleaner
+  .create({ name : 'Fuzz Foo', country : 'de', lalitute : 44.56677, longitude : 43.67764, gender : 'F', preferences : ['fridge']})
+  .then(function(clieaner) {
+    console.log({name : employee.get('name'), country : employee.get('country_code'), lalitute : employee.get('latitude'), longitude : employee.get('longitude'), gender : employee.get('gender'), preferences : employee.get('preferences')});
+  })
+
+Cleaner
+  .create({ name : 'Dark Wing Duck', country : 'au', lalitute : 55.35546, longitude : 45.667887, gender : 'F', preferences : ['fridge']})
   .then(function(clieaner) {
     console.log({name : employee.get('name'), country : employee.get('country_code'), lalitute : employee.get('latitude'), longitude : employee.get('longitude'), gender : employee.get('gender'), preferences : employee.get('preferences')});
   })
