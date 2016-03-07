@@ -1,33 +1,28 @@
 #!/usr/bin/env node
 
-var argv = require('yargs').argv;
+var argv = require('yargs').argv,
+    criterias = ['country', 'geo', 'gender', 'preferences'],
+    Arguments = Arguments || {},
+    Query = Query || {};
 
-var criterias = ['country', 'geo', 'gender', 'preferences'];
+console.log('country: ' + argv.country + ' geo: ' + argv.geo + ' gender: ' + argv.gender + ' preferences: ' + argv.preferences);
 
-console.log('country: ' + argv.country);
-console.log('geo: ' + argv.geo);
-console.log('gender: ' + argv.gender);
-console.log('preferences: ' + argv.preferences);
-
-var Arguments = {
-   build : function (args) {
-      return {
-         id: args.id,
-         name: args.name,
-         country_code: args.country_code,
-         latitude: args.latitude,
-         longitude: args.longitude,
-         gender: args.gender,
-         preferences: args.preferences
+Arguments.build = function (args) {
+  return {
+     id: args.id,
+     name: args.name,
+     country_code: args.country_code,
+     latitude: args.latitude,
+     longitude: args.longitude,
+     gender: args.gender,
+     preferences: args.preferences
    }
-};
+}
 
-var Query = {
-   build : function (args, cb) {
-      //make the query for db and get result
-      cb(result);
-   }
-};
+Query.build = function (args, cb) {
+  //make the query for db and get result
+  cb(result);
+}
 
 //usage
 /*
