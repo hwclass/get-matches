@@ -4,17 +4,25 @@ An experimental tool to manage Node.js scripts over Gulp
 ###Setup
 
 ####Install gulp
-* npm install --save gulp -g
+```javascript
+npm install --save gulp -g
+```
 
 ####Install gulp-exec
-* npm install --save gulp-exec
+```javascript
+npm install --save gulp-exec
+```
 
 ####Install yargs
-* npm install --save yargs
+```javascript
+npm install --save yargs
+```
 
 ####Install Sequelize
-* npm install --save sequelize
-* npm install --save pg pg-hstore
+```javascript
+npm install --save sequelize
+npm install --save pg pg-hstore
+```
 
 ####Download postgres
 [Link](http://www.postgresql.org/download/) or optionally [Link](http://postgresapp.com/)
