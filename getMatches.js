@@ -1,3 +1,21 @@
+/*!
+ * getMatches.js.
+ *
+ * Copyright (c) 2016 Barış Güler
+ * http://hwclass.in
+ *
+ * Licensed under MIT
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ *
+ * Launch  : March 2016
+ * Version : 1.0.0
+ * Released: March 8th, 2016
+ *
+ *
+ * Manages the tasks as creating a dummy db and querying it over get-matches method
+ */
+
 #!/usr/bin/env node
 
 var argv = require('yargs').argv,
@@ -6,8 +24,17 @@ var argv = require('yargs').argv,
     Arguments = Arguments || {},
     Query = Query || {};
 
-console.log('country: ' + argv.country + ' geo: ' + argv.geo + ' gender: ' + argv.gender + ' preferences: ' + argv.preferences);
+//console.log('country: ' + argv.country + ' geo: ' + argv.geo + ' gender: ' + argv.gender + ' preferences: ' + argv.preferences);
 
+/**
+ * ArgumentOptions.build() is an options creator with coming arguments
+ *
+ * @param {string} country
+ * @param {array} geo
+ * @param {string} gender
+ * @param {array} preferences
+ * @returns {object}
+*/
 ArgumentOptions.build = function (country, geo, gender, preferences) {
   return {
      country_code: country_code,
@@ -18,6 +45,12 @@ ArgumentOptions.build = function (country, geo, gender, preferences) {
    }
 }
 
+/**
+ * Arguments.build() is a db-schema-ready object creator method
+ *
+ * @param {object} args
+ * @returns {object}
+*/
 Arguments.build = function (args) {
   return {
      id: args.id,
@@ -30,6 +63,13 @@ Arguments.build = function (args) {
    }
 }
 
+/**
+ * Query.build() is a communicator for the database to query it
+ *
+ * @param {object} args
+ * @param {function} cb
+ * @returns {array} result
+*/
 Query.build = function (args, cb) {
   //make the query for db and get result
   cb(result);

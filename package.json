@@ -4,7 +4,8 @@
   "description": "An experimental tool to manage Node.js scripts over Gulp",
   "main": "index.js",
   "scripts": {
-    "get-matches" : "node getMatches.js"
+    "prepare-db": "node pgStarter.js",
+    "get-matches": "node getMatches.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,10 @@
     "gulp": "^3.9.1",
     "gulp-exec": "^2.1.2",
     "yargs": "^4.2.0"
+  },
+  "dependencies": {
+    "pg": "^4.5.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.19.3"
   }
 }
