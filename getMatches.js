@@ -22,59 +22,23 @@ var Database = require('sequelize'),
     argv = require('yargs').argv,
     criterias = ['country', 'geo', 'gender', 'preferences'],
     ArgumentOptions = ArgumentOptions || {},
-    Arguments = Arguments || {},
-    Query = Query || {},
-    CLI =  CLI || {},
-    config = {
-      db : {
-        user : 'hwclass',
-        pass : 'Qwe123!',
-        domain : 'localhost',
-        port : '5432',
-        dbName : 'hwclass'
-      }
-    }
+    Arguments = require('./utils/Arguments'),
+    CLI = require('./utils/CLI'),
+    _ = require('lodash'),
+    colors = require('colors/safe'),
+    config = require('./config/storage');
 
-var db = new Database('postgres://'+config.db.user+':'+config.db.pass+'@'+config.db.domain+':'+config.db.port+'/'+config.db.dbName);
-
-
-//console.log('country: ' + argv.country + ' geo: ' + argv.geo + ' gender: ' + argv.gender + ' preferences: ' + argv.preferences);
+//create a database instance by connection
+var db = new Database('postgres://'+config.user+':'+config.pass+'@'+config.domain+':'+config.port+'/'+config.dbName, {
+  dialect: 'postgres'
+});
 
 /**
- * ArgumentOptions.build() is an options creator with coming arguments
+ * Cleaner : Object Relational Mapping wrapper for 'cleaners' table
  *
- * @param {string} country
- * @param {array} geo
- * @param {string} gender
- * @param {array} preferences
- * @returns {object}
+ * @noparam
+ * @noreturn
 */
-ArgumentOptions.build = function (country, geo, gender, preferences) {
-  return {
-     country_code: country_code,
-     latitude: geo.split(',')[0],
-     longitude: geo.split(',')[1],
-     gender: gender,
-     preferences: preferences
-   }
-}
-
-/**
- * Arguments.build() is a db-schema-ready object creator method
- *
- * @param {object} args
- * @returns {object}
-*/
-Arguments.build = function (args) {
-  var builtArguments = {};
-  for (var item in args) {
-    if (item !== '' || typeof item !== 'null' || item !== undefined) {
-      builtArguments[item]= args[item]
-    }
-  } 
-  return builtArguments;
-}
-
 var Cleaner = db.define('cleaner', {
   name:  {
     type     : Database.STRING,
@@ -130,57 +94,57 @@ var Cleaner = db.define('cleaner', {
   preferences: {
     type     : Database.STRING,
     allowNull: false,
-    get: function() {
-      return JSON.parse(this.getDataValue('preferences'));
-    }, 
-    set: function(val) {
-      return this.setDataValue('preferences', JSON.stringify(val));
+    get      : function () {
+      var preferences = this.getDataValue('preferences');
+      return preferences;
+    },
+    set      : function(val) {
+      this.setDataValue('preferences', val);
     }
   }
 });
 
-/**
- * Query.build() is a communicator for the database to query it
- *
- * @param {object} args
- * @param {function} cb
- * @returns {array} result
-*/
-Query.build = function (args, cb) {
-  //make the query for db and get result
-  cb(result);
+var optionsAfterFetchedArguments = {
+  country_code : argv.country, 
+  latitude : (!_.isUndefined(argv.geo.split(',')[0])?argv.geo.split(',')[0]:undefined),
+  longitude : (!_.isUndefined(argv.geo.split(',')[0])?argv.geo.split(',')[1]:undefined),
+  gender : argv.gender,
+  preferences : argv.preferences
 }
 
-/*
-Cleaner.sync({force: true}).then(function () {
-  return Cleaner.create({ name : 'John Doe', country_code : 'nl', latitude : 43.5677754, longitude : 30.4423445, gender : 'M', preferences : ['fridge', 'owen']});
-});
-*/
+function cleanOptions (options) {
+  for (var idx in options) {
+    if (options[idx] === null || options[idx] === undefined || options[idx] === 'undefined' || options[idx] === [ 'undefined' ]) {
+      delete options[idx];
+    }
+  }
+  return options;
+}
 
-builtArguments = Arguments.build({country_code : 'nl'});
+var coolOptions = cleanOptions(optionsAfterFetchedArguments);
 
-console.dir(builtArguments);
+console.log('coolOptions:');
+console.dir(coolOptions);
+
+builtArguments = Arguments.build(coolOptions);
 
 Cleaner.findAll({
   where: builtArguments
-}).then(function (result) {
-  CLI.build(result);
-});
-
-CLI.build = function (result) {
-  var outputStr = '';
-  for (var resultIndex = 0, len = result.length; resultIndex < len; resultIndex++) {
-    outputStr += '- id: ' + result[resultIndex].id + ' - name: ' + result[resultIndex].name + ' - gender: ' + result[resultIndex].gender +' - preferences:' + result[resultIndex].preferences;
+}).then(function (results) {
+  if (_.isEmpty(results)) {
+    console.log(colors.underline.red('\nNo results found.'));
+  } else {
+    console.log('\n');
+    var outputStr = CLI.build(results);
+    console.log(outputStr);
   }
-  console.log(outputStr);
-}
+});
 
 /*
 db.query("SELECT * FROM cleaners").then(function(myTableRows) {
   console.log(myTableRows[0]);
 })
 */
-  
 
 /*
 Cleaner.findAll({}).then(function (cleaners) {

@@ -32,7 +32,7 @@ gulp.task('prepare-db', function (cb) {
       return;
     } else {
       console.log(stdout);
-      console.log('db created.');
+      console.log('prepared-db command finished working.');
     }
   })
 })
@@ -45,6 +45,7 @@ gulp.task('get-matches', function (cb) {
   exec('npm run get-matches' + ' -- --country='+argv['country'] + ' --geo='+argv['geo'] + ' --gender='+argv['gender'] + ' --preferences='+argv['preferences'], function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
+    console.log('get-matches command finished working.');
     cb(err);
   });
 });

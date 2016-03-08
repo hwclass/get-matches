@@ -30,6 +30,8 @@
     "yargs": "^4.2.0"
   },
   "dependencies": {
+    "colors": "^1.1.2",
+    "lodash": "^4.6.1",
     "pg": "^4.5.1",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.19.3"
