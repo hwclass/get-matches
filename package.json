@@ -4,7 +4,7 @@
   "description": "An experimental tool to manage Node.js scripts over Gulp",
   "main": "index.js",
   "scripts": {
-    "prepare-db": "node pgStarter.js",
+    "prepare-db": "node ./storage/starter/index.js",
     "get-matches": "node getMatches.js"
   },
   "repository": {

@@ -23,14 +23,16 @@ var Database = require('sequelize'),
     criterias = ['country', 'geo', 'gender', 'preferences'],
     ArgumentOptions = ArgumentOptions || {},
     Arguments = require('./utils/Arguments'),
-    CLI = require('./utils/CLI'),
+    CliMessage = require('./utils/CliMessage'),
+    CleanOptions = require('./utils/CleanOptions'),
     _ = require('lodash'),
     colors = require('colors/safe'),
-    config = require('./config/storage');
+    config = require('./config/storage'),
+    DbQuery = require('./utils/DbQuery');
 
 //create a database instance by connection
-var db = new Database('postgres://'+config.user+':'+config.pass+'@'+config.domain+':'+config.port+'/'+config.dbName, {
-  dialect: 'postgres'
+var db = new Database(DbQuery.build(config.user, config.pass, config.domain, config.port, config.dbName, config.dialect), {
+  dialect: config.dialect
 });
 
 /**
@@ -104,67 +106,22 @@ var Cleaner = db.define('cleaner', {
   }
 });
 
-var optionsAfterFetchedArguments = {
+//generated the refined parameters for our select query
+builtArguments = Arguments.build(CleanOptions.build({
   country_code : argv.country, 
   latitude : (!_.isUndefined(argv.geo.split(',')[0])?argv.geo.split(',')[0]:undefined),
   longitude : (!_.isUndefined(argv.geo.split(',')[0])?argv.geo.split(',')[1]:undefined),
   gender : argv.gender,
   preferences : argv.preferences
-}
+}));
 
-function cleanOptions (options) {
-  for (var idx in options) {
-    if (options[idx] === null || options[idx] === undefined || options[idx] === 'undefined' || options[idx] === [ 'undefined' ]) {
-      delete options[idx];
-    }
-  }
-  return options;
-}
-
-var coolOptions = cleanOptions(optionsAfterFetchedArguments);
-
-console.log('coolOptions:');
-console.dir(coolOptions);
-
-builtArguments = Arguments.build(coolOptions);
-
+//get all the data you need from cleaners table
 Cleaner.findAll({
   where: builtArguments
 }).then(function (results) {
   if (_.isEmpty(results)) {
     console.log(colors.underline.red('\nNo results found.'));
   } else {
-    console.log('\n');
-    var outputStr = CLI.build(results);
-    console.log(outputStr);
+    console.log('\n' + CliMessage.build(results));
   }
 });
-
-/*
-db.query("SELECT * FROM cleaners").then(function(myTableRows) {
-  console.log(myTableRows[0]);
-})
-*/
-
-/*
-Cleaner.findAll({}).then(function (cleaners) {
-  console.log('find all cleaners');
-  console.dir(cleaners);
-});
-*/
-
-//usage
-/*
-var args = Arguments.build({country_code : argv.country, geo : argv.geo, gender : argv.gender, preferences : argv.preferences});
-Query.build(args, function (data) {
-   var result = data;
-});
-
-//or
-
-Query.build(Arguments.build(ArgumentOptions.build(argv.country, argv.geo, argv.gender, argv.preferences)), function (data) {
-   var result = data; 
-});
-*/
-
-//gulp get-matches --country=nl --geo=52.3650172,4.8375675 --gender=F --preferences=fridge,ironing

@@ -19,12 +19,13 @@
  */
 
 var Database = require('sequelize'),
-  _ = require('lodash'),
-	config = require('./config/storage')
+    _ = require('lodash'),
+    config = require('./../../config/storage'),
+    DbQuery = require('./../../utils/DbQuery');
 
 //create a database instance by connection
-var db = new Database('postgres://'+config.user+':'+config.pass+'@'+config.domain+':'+config.port+'/'+config.dbName, {
-  dialect: 'postgres'
+var db = new Database(DbQuery.build(config.user, config.pass, config.domain, config.port, config.dbName, config.dialect), {
+  dialect: config.dialect
 });
 
 //create data model
@@ -95,16 +96,16 @@ var Cleaner = db.define('cleaner', {
 
 
 //add a sample record into the storage
+/*
 Cleaner.sync({force: true}).then(function () {
   return Cleaner.create({ name : 'Donald Duck', country_code : 'nl', latitude : 52.3650172, longitude : 4.8375675, gender : 'F', preferences : 'fridge'});
 });
+*/
 
 //get all rows from storage
-/*
 Cleaner.findAll({}).then(function (results) {
   console.dir(results);
-}); 
-*/
+});
 
 /*
 db.query('SELECT * FROM cleaners').then(function (results) {
@@ -134,25 +135,4 @@ Cleaner.sync({force: true}).then(function () {
 Cleaner.sync({force: true}).then(function () {
   return Cleaner.create({ name : 'Dark Wing Duck', country_code : 'de', latitude : 43.5677754, longitude : 30.4423445, gender : 'M', preferences : ['fridge', 'owen']});
 });
-*/
-
-//add dummy data
-/*
-Cleaner
-  .create({ name : 'John Doe', country : 'nl', lalitute : 43.5677754, longitude : 30.4423445, gender : 'M', preferences : ['fridge', 'ironing']})
-  .then(function(cleaner) {
-    console.log({name : cleaner.get('name'), country : cleaner.get('country_code'), lalitute : cleaner.get('latitude'), longitude : cleaner.get('longitude'), gender : cleaner.get('gender'), preferences : cleaner.get('preferences')});
-  });
-
-Cleaner
-  .create({ name : 'Fuzz Foo', country : 'de', lalitute : 44.56677, longitude : 43.67764, gender : 'F', preferences : ['fridge']})
-  .then(function(cleaner) {
-    console.log({name : cleaner.get('name'), country : cleaner.get('country_code'), lalitute : cleaner.get('latitude'), longitude : cleaner.get('longitude'), gender : cleaner.get('gender'), preferences : cleaner.get('preferences')});
-  })
-
-Cleaner
-  .create({ name : 'Dark Wing Duck', country : 'au', lalitute : 55.35546, longitude : 45.667887, gender : 'F', preferences : ['fridge']})
-  .then(function(cleaner) {
-    console.log({name : cleaner.get('name'), country : cleaner.get('country_code'), lalitute : cleaner.get('latitude'), longitude : cleaner.get('longitude'), gender : cleaner.get('gender'), preferences : employee.get('preferences')});
-  })
 */
