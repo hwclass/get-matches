@@ -3,6 +3,18 @@ An experimental tool to query database for cleaners with Node
 
 <img src="http://i63.tinypic.com/o05dgy.png" style="width: 100%;">
 
+### Usage
+
+#### Create db and entries
+```javascript
+gulp prepare-db
+```
+
+#### Start searching
+```javascript
+gulp get-matches --country=nl --geo=52.3650172,4.8375675 --gender=F --preferences=fridge,ironing
+```
+
 ### Technical Spec
 * [Node.js](www.nodejs.org) / as Javascript Hero
 * [Postgresql](http://www.postgresql.org/) / as Storage Monster
@@ -54,18 +66,6 @@ npm install --save pg pg-hstore
 
 #### Download Postgresql
 [Link](http://www.postgresql.org/download/) or optionally [Link](http://postgresapp.com/) or [brew it](http://formulae.brew.sh/formula/postgresql)
-
-### Usage
-
-#### Create db and entries
-```javascript
-gulp prepare-db
-```
-
-#### Start searching
-```javascript
-gulp get-matches --country=nl --geo=52.3650172,4.8375675 --gender=F --preferences=fridge,ironing
-```
 
 ### Possible improvements
 
